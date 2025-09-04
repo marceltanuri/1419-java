@@ -1,0 +1,37 @@
+# Java build output
+*.class
+*.jar
+*.war
+*.ear
+target/
+bin/
+build/
+out/
+*.iml
+*.ipr
+*.iws
+dist/
+build/
+out/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Misc
+*.tgz
+*.zip
