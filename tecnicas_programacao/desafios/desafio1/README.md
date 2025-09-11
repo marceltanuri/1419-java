@@ -39,43 +39,25 @@ Para se aposentar, a pessoa deve atender **ambos** os critérios de idade e temp
     *   Idade mínima: 59 anos
     *   Tempo de contribuição mínimo: 30 anos
 
-## Estrutura de Dados Sugerida
+## Passos para Realizar o Desafio
 
-Você pode criar classes para organizar os dados:
+O esqueleto do projeto já foi criado para você! As classes básicas (`Pessoa`, `RegistroProfissional`, `Sexo`) e um arquivo `Main.java` com os cenários de teste já existem. Seu objetivo é focar na implementação da lógica de negócio.
 
-```java
-public enum Sexo {
-    MASCULINO,
-    FEMININO
-}
-```
+Siga os passos abaixo:
 
-```java
-public class RegistroProfissional {
-    private LocalDate dataInicio;
-    private LocalDate dataFim;
+1.  **Explore o Projeto:** Navegue pelos arquivos `Pessoa.java`, `RegistroProfissional.java`, e `Sexo.java` para entender como os dados estão estruturados. Abra o `Main.java` e veja como os objetos de teste são criados.
 
-    // Construtores, getters e setters
-}
-```
+2.  **Encontre o Ponto de Partida:** Toda a sua lógica deve ser implementada no arquivo `CalculadoraAposentadoria.java`, dentro do método `verificarAposentadoria(Pessoa pessoa)`. Atualmente, ele apenas retorna uma mensagem dizendo que não foi implementado.
 
-```java
-public class Pessoa {
-    private String nome;
-    private LocalDate dataNascimento;
-    private Sexo sexo;
-    private List<RegistroProfissional> registros;
+3.  **Implemente os Cálculos:** Dentro do método `verificarAposentadoria`, você precisará:
+    *   **Calcular a idade da pessoa:** Use a data de nascimento da `Pessoa` e a data atual (`LocalDate.now()`) para obter a idade em anos, meses e dias.
+    *   **Calcular o tempo total de contribuição:** Percorra a lista de `registros` da `Pessoa`. Para cada registro, calcule o período entre a data de início e a data de fim. Some todos esses períodos para obter um tempo total de contribuição (veja a seção de **Dicas** para lidar com a soma de períodos).
 
-    // Construtores, getters e setters
-}
-```
+4.  **Aplique as Regras:** Com a idade e o tempo de contribuição em mãos, verifique se a pessoa atende aos critérios de aposentadoria definidos na seção **Regras para Aposentadoria**.
 
-## Dicas
+5.  **Construa a String de Retorno:** Formate a sua resposta final como uma `String`, seguindo o padrão da seção **Exemplo de Saída**. A mensagem deve ser clara, informando se a pessoa está apta e, caso não esteja, o que falta para atingir os critérios.
 
-*   Use `LocalDate` para representar as datas.
-*   Utilize `Period` ou `ChronoUnit` para calcular a diferença entre as datas e determinar a idade e o tempo de contribuição.
-*   `Period.between(dataInicio, dataFim)` pode ser útil para calcular a duração de cada registro profissional.
-*   Lembre-se que a classe `Period` possui os métodos `getYears()`, `getMonths()` e `getDays()` para obter os componentes do período. A soma de períodos pode não ser trivial, então pense em como agregar os anos, meses e dias de forma correta. Uma abordagem pode ser converter tudo para dias, somar e depois converter de volta para anos, meses e dias.
+6.  **Execute e Valide:** Rode o método `main` na classe `Main.java`. O programa executará os 4 cenários de teste. Compare a saída do seu programa com os resultados esperados na seção **Exemplo de Saída**. Se os resultados forem iguais, parabéns, você completou o desafio!
 
 ## Exemplo de Saída
 
@@ -126,4 +108,12 @@ Tempo restante para aposentadoria:
 - Faltam 3 anos, 0 meses e 0 dias para atingir o tempo de contribuição mínimo.
 ```
 
-Boa sorte!
+## Dicas
+
+*   Use `LocalDate` para representar as datas.
+*   Utilize `Period` ou `ChronoUnit` para calcular a diferença entre as datas e determinar a idade e o tempo de contribuição.
+*   `Period.between(dataInicio, dataFim)` pode ser útil para calcular a duração de cada registro profissional.
+*   Lembre-se que a classe `Period` possui os métodos `getYears()`, `getMonths()` e `getDays()` para obter os componentes do período. A soma de períodos pode não ser trivial, então pense em como agregar os anos, meses e dias de forma correta. Uma abordagem pode ser converter tudo para dias, somar e depois converter de volta para anos, meses e dias.
+*   Teste seu código frequentemente para garantir que cada parte funcione corretamente antes de avançar para a próxima.
+
+Boa diversão e bom código!
