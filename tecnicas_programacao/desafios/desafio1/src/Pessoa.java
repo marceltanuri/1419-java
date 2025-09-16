@@ -2,10 +2,10 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Pessoa {
-    private String nome;
-    private LocalDate dataNascimento;
-    private Sexo sexo;
-    private List<RegistroProfissional> registros;
+    private final String nome;
+    private final LocalDate dataNascimento;
+    private final Sexo sexo;
+    private final List<RegistroProfissional> registros;
 
     public Pessoa(String nome, LocalDate dataNascimento, Sexo sexo, List<RegistroProfissional> registros) {
         this.nome = nome;
@@ -28,5 +28,25 @@ public class Pessoa {
 
     public List<RegistroProfissional> getRegistros() {
         return registros;
+    }
+
+    @Override
+    public String toString() {
+        return "Pessoa{" +
+                "nome='" + nome + '\'' +
+                ", dataNascimento=" + dataNascimento +
+                ", sexo=" + sexo +
+                ", registros=" + registros +
+                '}';
+    }
+
+    public String calcularAposentadoria() {
+        CalcularAposentadoria calculadora;
+        if (this.sexo == Sexo.MASCULINO) {
+            calculadora = new CalculadoraAposentadoriaHomem(this);
+        } else {
+            calculadora = new CalculadoraAposentadoriaMulher(this);
+        }
+        return calculadora.calcular();
     }
 }
