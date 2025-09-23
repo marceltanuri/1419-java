@@ -8,13 +8,15 @@ public class Produto{
     private String descricao;
     private double preco;
     private int quantidadeEstoque;
+    private Departamento departamento;
 
-    public Produto(String codigo, String nome, String descricao, double preco, int quantidadeEstoque) {
+    public Produto(String codigo, String nome, String descricao, double preco, int quantidadeEstoque, Departamento departamento) {
         this.codigo = codigo;
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
         this.quantidadeEstoque = quantidadeEstoque;
+        this.departamento = departamento;
     }
 
     public String getCodigo() {
@@ -36,6 +38,11 @@ public class Produto{
     public int getQuantidadeEstoque() {
         return quantidadeEstoque;
     }
+
+    public Departamento getDepartamento() {
+        return departamento;
+    }
+
 
     public void baixarEstoque(int quantidade) {
         if (quantidade > quantidadeEstoque) {

@@ -1,10 +1,14 @@
 package ada.t1419.ecommerce.domain.model.pedido;
 
-import java.util.List;
 import ada.t1419.ecommerce.domain.model.Cliente;
 import ada.t1419.ecommerce.domain.model.CupomDeDesconto;
 import ada.t1419.ecommerce.domain.model.Produto;
 import java.util.Optional;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import ada.t1419.ecommerce.domain.model.Departamento;
 
 public class Pedido {
 
@@ -54,6 +58,30 @@ public class Pedido {
 
     public void removerCupomDesconto() {
         this.cupomDeDesconto = null;
+    }
+
+    // listar itens por departamento
+    // qual estrutura de dados me ajuda quando eu preciso agrupar dados
+    // Map é uma estrutura de dados que te ajuda nesse desafio
+    // Map<K,V> mapa = new HashMap();
+
+
+    public Map<Departamento, List<ItemDePedido>> listarItensPorDepartamento() {
+        Map<Departamento, List<ItemDePedido>> itensPorDepartamento = new HashMap<>();
+
+        // continue esse  codigo usando lambda ao inves de for classico
+        //itens.forEach(item -> { 
+        // ............
+
+        for (ItemDePedido item : itens) {
+            Departamento departamento = item.produto().getDepartamento();
+            if (!itensPorDepartamento.containsKey(departamento)) {
+                itensPorDepartamento.put(departamento, new ArrayList<>());
+            }
+            itensPorDepartamento.get(departamento).add(item);
+        }
+
+        return itensPorDepartamento;
     }
 
     public void aplicarCupomDesconto(CupomDeDesconto cupom) {
