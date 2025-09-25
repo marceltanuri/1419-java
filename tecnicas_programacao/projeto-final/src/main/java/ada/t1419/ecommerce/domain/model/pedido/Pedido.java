@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import ada.t1419.ecommerce.domain.model.Departamento;
+import java.util.stream.Collectors;
+
 
 public class Pedido {
 
@@ -66,23 +68,32 @@ public class Pedido {
     // Map<K,V> mapa = new HashMap();
 
 
+    // Mapa é uma estrutura de dados.
+    // A qual organiza os dados por: Chave e Valor
+    
+    // Listas: Organiza os dados em sequencia
+    // Filas: Tambem em sequencia a ordem de entrada e a ordem de saida sao especificas: FIFO
+    // Pilhas: Tambem tem um ordem especifica de entrada e saida: LIFO
+    // Set: Nao permite duplicatas
+    // Tree: Organiza e ordena
+    // Mapa: Organizaçao em Chave e Valor
+
+
     public Map<Departamento, List<ItemDePedido>> listarItensPorDepartamento() {
-        Map<Departamento, List<ItemDePedido>> itensPorDepartamento = new HashMap<>();
-
-        // continue esse  codigo usando lambda ao inves de for classico
-        //itens.forEach(item -> { 
-        // ............
-
-        for (ItemDePedido item : itens) {
-            Departamento departamento = item.produto().getDepartamento();
-            if (!itensPorDepartamento.containsKey(departamento)) {
-                itensPorDepartamento.put(departamento, new ArrayList<>());
-            }
-            itensPorDepartamento.get(departamento).add(item);
-        }
-
-        return itensPorDepartamento;
+        return itens.stream()
+                .collect(Collectors.groupingBy(item ->  item.produto().getDepartamento()));
     }
+
+    public double calcularValorTotalPorDepartamento(Departamento departamento) {
+        //use o obejto itens, e:
+        // pode resolver com logica de programação basica
+        // ou com programação funcional
+        //     filter
+        //     map
+        //     reduce
+        return 0.0;
+    }
+
 
     public void aplicarCupomDesconto(CupomDeDesconto cupom) {
         this.cupomDeDesconto = cupom;

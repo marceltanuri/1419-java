@@ -32,11 +32,8 @@ public class Main {
         itensPorDepartamento.forEach((departamento, itens) -> {
             System.out.println("Departamento: " + departamento);
             System.out.println("Itens:");
-            itens.forEach(System.out::println);
-            double valorTotalDepartamento = itens.stream()
-                    .mapToDouble(item -> item.produto().getPreco() * item.quantidade())
-                    .sum();
-            System.out.println("Valor total do departamento: " + valorTotalDepartamento);
+            System.out.println("Valor total do departamento: " + pedido.calcularValorTotalPorDepartamento(departamento));
+            itens.forEach(item -> System.out.println(item));
             System.out.println("-------------------------------");
         });
 
