@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.ArrayList;
 import ada.t1419.ecommerce.domain.model.Departamento;
 import java.util.stream.Collectors;
+import java.util.function.Predicate;
+import java.util.function.Function;
+import java.util.function.BinaryOperator;
+
 
 
 public class Pedido {
@@ -85,13 +89,38 @@ public class Pedido {
     }
 
     public double calcularValorTotalPorDepartamento(Departamento departamento) {
-        //use o obejto itens, e:
-        // pode resolver com logica de programação basica
-        // ou com programação funcional
-        //     filter
-        //     map
-        //     reduce
-        return 0.0;
+        final double valorInicial = 0.0;
+        Double resultado = itens.stream()
+                .filter(
+                    new Predicate<ItemDePedido>() {
+                        @Override
+                        public boolean test(ItemDePedido item) {
+                            return item.produto().getDepartamento().equals(departamento);
+                        }
+                     }
+                    //item -> item.produto().getDepartamento().equals(departamento)
+                )
+                .map(
+                    new Function<ItemDePedido, Double>() {
+                        @Override
+                        public Double apply(ItemDePedido item) {
+                            return item.produto().getPreco() * item.quantidade();
+                        }
+                    }
+                    //item -> item.produto().getPreco() * item.quantidade()
+                )
+                .reduce(
+                    valorInicial, 
+                    new BinaryOperator<Double>() {
+                        @Override
+                        public Double apply(Double contador, Double preco) {
+                            return contador + preco;
+                        }
+                    }
+                    //(contador, preco) -> contador + preco
+                );
+
+        return resultado;
     }
 
 
