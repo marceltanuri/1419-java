@@ -87,11 +87,3 @@ const usuarios = [
     4.2 - Passos: 1. Filter (idade < 35) → 2. Map (obter apenas as idades) → 3. Reduce (somar as idades).
 
     - Resultado Esperado: 28 + 22 = 50
-
-
-
-
-
-
-
-
