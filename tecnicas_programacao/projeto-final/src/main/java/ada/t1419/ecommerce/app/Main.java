@@ -1,10 +1,12 @@
 package ada.t1419.ecommerce.app;
 
+import ada.t1419.ecommerce.domain.model.Cliente;
 import ada.t1419.ecommerce.domain.model.Departamento;
 import ada.t1419.ecommerce.domain.model.Produto;
 import ada.t1419.ecommerce.domain.model.pedido.ItemDePedido;
 import ada.t1419.ecommerce.domain.model.pedido.Pedido;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +19,10 @@ public class Main {
         Produto produto3 = new Produto("P003", "Camiseta", "Camiseta de algodão", 50.00, 200, Departamento.VESTUARIO);
         Produto produto4 = new Produto("P004", "Java Efetivo 3a edição", "Livro sobre Java", 120.00, 50, Departamento.LIVROS);
 
-        Pedido pedido = new Pedido("PED123", null, new ArrayList<>());
+        Cliente client = new Cliente("123.456.789-0", "João Silva", "joao@gmail.com", LocalDate.of(2050,1,1));
+        client.detalhesCliente();
+
+        Pedido pedido = new Pedido("PED123", client, new ArrayList<>());
 
         pedido.adicionarItem(produto1, 2);
         pedido.adicionarItem(produto2, 1);
