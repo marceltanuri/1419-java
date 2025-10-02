@@ -55,6 +55,10 @@ public class Pedido {
         this.itens.limpar();
     }
 
+    public void paraCadaItem(java.util.function.BiConsumer<Produto, Integer> consumer) {
+        this.itens.paraCada(consumer);
+    }
+
 
     // Métodos que delegam os cálculos para a classe ItensDePedido
     public double calcularValorTotal() {

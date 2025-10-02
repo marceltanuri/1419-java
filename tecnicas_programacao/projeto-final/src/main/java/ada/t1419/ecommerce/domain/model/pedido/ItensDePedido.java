@@ -26,6 +26,14 @@ public class ItensDePedido {
     }
 
     public void adicionar(Produto produto, Integer quantidade) {
+        int quantidadeJaAdicionada = this.itens.getOrDefault(produto, 0);
+        if (produto.getQuantidadeEstoque() < quantidade + quantidadeJaAdicionada) {
+            throw new IllegalArgumentException("Não é possível adicionar a quantidade desejada do produto '"
+                    + produto.getNome() + "', pois não há estoque suficiente. " +
+                    "Quantidade disponível: " + produto.getQuantidadeEstoque() + ", " +
+                    "Quantidade já adicionada no carrinho: " + quantidadeJaAdicionada + ", " +
+                    "Quantidade solicitada: " + quantidade);
+        }
         this.itens.merge(produto, quantidade, Integer::sum);
     }
 
