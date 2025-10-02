@@ -1,13 +1,23 @@
 package ada.t1419.ecommerce.app;
 
+import ada.t1419.ecommerce.domain.model.Cliente;
 import ada.t1419.ecommerce.domain.model.Departamento;
 import ada.t1419.ecommerce.domain.model.Produto;
-import ada.t1419.ecommerce.domain.model.pedido.ItemDePedido;
 import ada.t1419.ecommerce.domain.model.pedido.Pedido;
+
+import java.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import ada.t1419.ecommerce.domain.service.ImpressoraDePedidos;
+import ada.t1419.ecommerce.domain.service.PromocaoService;
+import ada.t1419.ecommerce.domain.model.promocao.PromocaoPorDepartamento;
+import ada.t1419.ecommerce.domain.model.promocao.PromocaoPorProduto;
+
+import java.util.HashMap;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -17,36 +27,28 @@ public class Main {
         Produto produto3 = new Produto("P003", "Camiseta", "Camiseta de algodão", 50.00, 200, Departamento.VESTUARIO);
         Produto produto4 = new Produto("P004", "Java Efetivo 3a edição", "Livro sobre Java", 120.00, 50, Departamento.LIVROS);
 
-        Pedido pedido = new Pedido("PED123", null, new ArrayList<>());
+        Cliente cliente = new Cliente("Tanuri", "tanuri@email.com", LocalDate.of(1990, 1, 20));
+
+        Pedido pedido = new Pedido("PED123", cliente);
 
         pedido.adicionarItem(produto1, 2);
         pedido.adicionarItem(produto2, 1);
         pedido.adicionarItem(produto3, 2);
         pedido.adicionarItem(produto4, 1);
 
+        PromocaoService promocaoService = new PromocaoService();
 
-        Map<Departamento, List<ItemDePedido>> itensPorDepartamento = pedido.listarItensPorDepartamento();
+        Map<Integer, Double> faixasEletronicos = new HashMap<>();
+        faixasEletronicos.put(2, 0.10); // 10% de desconto para 2 ou mais itens
+        promocaoService.adicionarPromocao(new PromocaoPorDepartamento(Departamento.ELETRONICO, faixasEletronicos));
 
-        System.out.println("Itens por departamento:");
-        
-        itensPorDepartamento.forEach((departamento, itens) -> {
-            System.out.println("Departamento: " + departamento);
-            System.out.println("Itens:");
-            System.out.println("Valor total do departamento: " + pedido.calcularValorTotalPorDepartamento(departamento));
-            itens.forEach(item -> System.out.println(item));
-            System.out.println("-------------------------------");
-        });
+        Map<Integer, Double> faixasNotebook = new HashMap<>();
+        faixasNotebook.put(2, 0.05); // 5% de desconto para 2 ou mais notebooks
+        promocaoService.adicionarPromocao(new PromocaoPorProduto(produto1, faixasNotebook));
 
-        System.out.println("Valor total do pedido: " + pedido.calcularValorTotal());
+        String relatorio = ImpressoraDePedidos.INSTANCE.imprimirPedidoFormatado(pedido, promocaoService);
+        System.out.println(relatorio);
 
-        // Desde a versão 8, introduziu-se o Stream junto com Interfaces Funcionais
 
-        // getCupomDeDesconto é um optional, invocar isValido se cupom estiver presente
-        if (pedido.getCupomDeDesconto().isPresent()) {
-            System.out.println("Cupom de desconto aplicado: " + pedido.getCupomDeDesconto().get().getCodigo());
-            System.out.println(pedido.getCupomDeDesconto().get().isValido() ? "Cupom válido" : "Cupom inválido");
-        } else {
-            System.out.println("Nenhum cupom de desconto aplicado.");
-        }
     }
 }

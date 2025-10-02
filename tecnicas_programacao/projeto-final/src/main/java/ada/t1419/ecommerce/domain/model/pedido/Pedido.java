@@ -2,31 +2,24 @@ package ada.t1419.ecommerce.domain.model.pedido;
 
 import ada.t1419.ecommerce.domain.model.Cliente;
 import ada.t1419.ecommerce.domain.model.CupomDeDesconto;
-import ada.t1419.ecommerce.domain.model.Produto;
-import java.util.Optional;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
 import ada.t1419.ecommerce.domain.model.Departamento;
-import java.util.stream.Collectors;
-import java.util.function.Predicate;
-import java.util.function.Function;
-import java.util.function.BinaryOperator;
+import ada.t1419.ecommerce.domain.model.Produto;
 
-
+import java.util.Map;
+import java.util.Optional;
 
 public class Pedido {
 
     private String numero;
     private Cliente cliente;
-    private List<ItemDePedido> itens;
+    private ItensDePedido itens;
     private CupomDeDesconto cupomDeDesconto;
 
-    public Pedido(String numero, Cliente cliente, List<ItemDePedido> itens) {
+    public Pedido(String numero, Cliente cliente) {
         this.numero = numero;
         this.cliente = cliente;
-        this.itens = itens;
+        this.itens = new ItensDePedido();
+        this.cupomDeDesconto = null;
     }
 
     public String getNumero() {
@@ -37,92 +30,58 @@ public class Pedido {
         return cliente;
     }
 
-    public List<ItemDePedido> getItens() {
-        return itens;
+    // Métodos que delegam a manipulação de itens para a classe ItensDePedido
+    public void adicionarItem(Produto produto, Integer quantidade) {
+        this.itens.adicionar(produto, quantidade);
     }
 
-    public void adicionarItem(Produto produto, int quantidade) {
-        this.itens.add(new ItemDePedido(produto, quantidade));
+    public void adicionarItem(Produto produto) {
+        this.itens.adicionar(produto);
     }
 
-    public double calcularValorTotal() {
-        double valorTotal = itens.stream()
-                .mapToDouble(item -> item.produto().getPreco() * item.quantidade())
-                .sum();
-        
-        if (cupomDeDesconto != null && cupomDeDesconto.isValido()) {
-            valorTotal -= valorTotal * (cupomDeDesconto.getPercentualDesconto() / 100);
-        }
-        
-        return valorTotal;
-    }  
+    public void removerItem(Produto produto, Integer quantidade) {
+        this.itens.remover(produto, quantidade);
+    }
 
     public void removerItem(Produto produto) {
-        // removeIf recebe por parâmetro um predicado (Predicate) (Interface Funcional que retorna boolean) permite o uso de expressões lambda
-        this.itens.removeIf(item -> item.produto().equals(produto));
+        this.itens.remover(produto);
     }
 
-    public void removerCupomDesconto() {
-        this.cupomDeDesconto = null;
+    public void excluirItem(Produto produto) {
+        this.itens.excluir(produto);
     }
 
-    // listar itens por departamento
-    // qual estrutura de dados me ajuda quando eu preciso agrupar dados
-    // Map é uma estrutura de dados que te ajuda nesse desafio
-    // Map<K,V> mapa = new HashMap();
+    public void limparItens() {
+        this.itens.limpar();
+    }
 
 
-    // Mapa é uma estrutura de dados.
-    // A qual organiza os dados por: Chave e Valor
-    
-    // Listas: Organiza os dados em sequencia
-    // Filas: Tambem em sequencia a ordem de entrada e a ordem de saida sao especificas: FIFO
-    // Pilhas: Tambem tem um ordem especifica de entrada e saida: LIFO
-    // Set: Nao permite duplicatas
-    // Tree: Organiza e ordena
-    // Mapa: Organizaçao em Chave e Valor
+    // Métodos que delegam os cálculos para a classe ItensDePedido
+    public double calcularValorTotal() {
+        return this.itens.calcularValorTotal();
+    }
 
-
-    public Map<Departamento, List<ItemDePedido>> listarItensPorDepartamento() {
-        return itens.stream()
-                .collect(Collectors.groupingBy(item ->  item.produto().getDepartamento()));
+    public Map<Departamento, ItensDePedido> listarItensPorDepartamento() {
+        return this.itens.listarItensPorDepartamento();
     }
 
     public double calcularValorTotalPorDepartamento(Departamento departamento) {
-        final double valorInicial = 0.0;
-        Double resultado = itens.stream()
-                .filter(
-                    new Predicate<ItemDePedido>() {
-                        @Override
-                        public boolean test(ItemDePedido item) {
-                            return item.produto().getDepartamento().equals(departamento);
-                        }
-                     }
-                    //item -> item.produto().getDepartamento().equals(departamento)
-                )
-                .map(
-                    new Function<ItemDePedido, Double>() {
-                        @Override
-                        public Double apply(ItemDePedido item) {
-                            return item.produto().getPreco() * item.quantidade();
-                        }
-                    }
-                    //item -> item.produto().getPreco() * item.quantidade()
-                )
-                .reduce(
-                    valorInicial, 
-                    new BinaryOperator<Double>() {
-                        @Override
-                        public Double apply(Double contador, Double preco) {
-                            return contador + preco;
-                        }
-                    }
-                    //(contador, preco) -> contador + preco
-                );
-
-        return resultado;
+        return this.itens.calcularValorTotalPorDepartamento(departamento);
     }
 
+    public int contarItensPorProduto(Produto produto) {
+        return this.itens.contarItensPorProduto(produto);
+    }
+
+    public int contarItensPorDepartamento(Departamento departamento) {
+        return this.itens.contarItensPorDepartamento(departamento);
+    }
+
+
+    // Métodos para manipulação do cupom de desconto
+    public void removerCupomDesconto() {
+        this.cupomDeDesconto = null;
+    }
 
     public void aplicarCupomDesconto(CupomDeDesconto cupom) {
         this.cupomDeDesconto = cupom;
