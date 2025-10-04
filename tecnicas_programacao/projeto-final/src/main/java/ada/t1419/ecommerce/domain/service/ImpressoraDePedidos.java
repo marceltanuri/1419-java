@@ -10,6 +10,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.Optional;
 
+// singleton: Design Pattern
+
 public enum ImpressoraDePedidos {
 
     INSTANCE;
